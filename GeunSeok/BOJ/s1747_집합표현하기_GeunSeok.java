@@ -1,3 +1,5 @@
+package programmers;
+
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.IOException;
@@ -16,7 +18,6 @@ public class s1747_집합표현하기_GeunSeok {
 
     static final int UNION = 0;
     static final int FIND = 1;
-
 
     static BufferedReader br;
     static BufferedWriter bw;
@@ -108,7 +109,8 @@ public class s1747_집합표현하기_GeunSeok {
         }
 
         if (rank[findA] > rank[findB]) {
-            set[findB] = findB;
+            set[findB] = findA;
+            return;
         }
 
         set[findA] = findB;
