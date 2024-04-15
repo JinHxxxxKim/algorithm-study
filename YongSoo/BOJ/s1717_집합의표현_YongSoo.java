@@ -7,7 +7,7 @@ import java.util.StringTokenizer;
  * Union-Find 알고리즘 사용
  */
 
-public class Main {
+public class s1717_집합의표현_YongSoo {
 
     static BufferedReader br;
     static StringTokenizer st;
