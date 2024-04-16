@@ -54,15 +54,15 @@ public class Main {
         int topParent1 = getTopParent(num1);
         int topParent2 = getTopParent(num2);
 
-        // 두 집합 중, 차수가 낮은 쪽에 차수가 높은 쪽을 포함해 주어야 함
+        // 두 집합 중, 차수가 낮은 쪽이 차수가 높은 쪽으로 들어가야 함
         if (rankOf[topParent1] < rankOf[topParent2]) {
             // 병합 처리 및
-            parentOf[topParent2] = topParent1;
-            // 차수 1 증가 (바로 아래로 들어갔으므로)
-            rankOf[topParent2] = rankOf[topParent1] + 1;
-        } else {
             parentOf[topParent1] = topParent2;
+            // 차수 1 증가
             rankOf[topParent1] = rankOf[topParent2] + 1;
+        } else {
+            parentOf[topParent2] = topParent1;
+            rankOf[topParent2] = rankOf[topParent1] + 1;
         }
     }
 
