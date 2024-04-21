@@ -63,6 +63,7 @@ public class Main {
 	
 	public static void main(String[] args) throws IOException {
 		br = new BufferedReader(new InputStreamReader(System.in));
+        sb = new StringBuilder();
 		st = new StringTokenizer(br.readLine().trim());
 		n = Integer.parseInt(st.nextToken());
 		m = Integer.parseInt(st.nextToken());
@@ -80,11 +81,13 @@ public class Main {
 			}
 			else if(oper==1) {
 				if(find(element1)==find(element2)) {
-					System.out.println("YES");
+                    sb.append("YES").append("\n");
+					
 				}else {
-					System.out.println("NO");
+					sb.append("NO").append("\n");
 				}
 			}
 		}
+        System.out.println(sb);
 	}
 }

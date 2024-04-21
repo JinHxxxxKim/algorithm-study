@@ -12,6 +12,7 @@ public class Main {
 	
 	public static void main(String[] args) throws IOException {
 		br = new BufferedReader(new InputStreamReader(System.in));
+        sb = new StringBuilder();
 		st = new StringTokenizer(br.readLine().trim());
 		m = Integer.parseInt(st.nextToken());
 		n = Integer.parseInt(st.nextToken());
@@ -32,9 +33,9 @@ public class Main {
 		
 		for(int idx=m; idx<=n; idx++) {
 			if(!notPrimeNum[idx]) {
-				System.out.println(idx);
+                sb.append(idx).append("\n");
 			}
 		}
-		
+	    System.out.println(sb);
 	}
 }
