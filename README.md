@@ -84,7 +84,5 @@ $ git commit -m "[BOJ] 거짓말 / UserName / 200ms"
 
 - [PULL_REQUEST_TEMPLATE](https://github.com/JinHxxxxKim/algorithm-study/blob/main/.github/PULL_REQUEST_TEMPLATE.md) 참고
 
-- `[BOJ] 거짓말 / UserName / 200ms`
-
 <br />
 <br />
