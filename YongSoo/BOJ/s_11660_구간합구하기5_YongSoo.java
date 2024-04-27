@@ -11,7 +11,7 @@ import java.util.*;
  *      cumSum[x2][y2] - cumSum[x2][y1-1] - cumSum[x1-1][y2] + cumSum[x1-1][y1-1]이다.
  */
 
-public class Main {
+public class s_11660_구간합구하기5_YongSoo {
     static BufferedReader br;
     static StringTokenizer st;
     static StringBuilder sb;

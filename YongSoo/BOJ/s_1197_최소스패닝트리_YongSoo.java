@@ -8,7 +8,7 @@ import java.util.*;
  * 프림 알고리즘 연습!
  */
 
-public class Main {
+public class s_1197_최소스패닝트리_YongSoo {
 
     static BufferedReader br;
     static StringTokenizer st;
