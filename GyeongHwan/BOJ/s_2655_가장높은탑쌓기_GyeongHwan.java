@@ -5,7 +5,7 @@ import java.lang.reflect.Array;
 import java.util.ArrayDeque;
 import java.util.Arrays;
 import java.util.StringTokenizer;
-
+ 
 /**
  * goal: 가장 높이 탑을 쌓는 경우를 찾고, 높이와 위에서부터의 벽돌번호를 출력해라.
  * 
