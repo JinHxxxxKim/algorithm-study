@@ -43,9 +43,14 @@ public class s1835_카드_SangHu {
         }
 
         // iterator 를 이용한 출력
-        printIterator = cardQueue.iterator();
-        while (printIterator.hasNext()) {
-            int element = printIterator.next();
+//        printIterator = cardQueue.iterator();
+//        while (printIterator.hasNext()) {
+//            int element = printIterator.next();
+//            sb.append(element).append(" ");
+//        }
+
+        // for-each 를 이용한 출력
+        for (Integer element : cardQueue) {
             sb.append(element).append(" ");
         }
 
