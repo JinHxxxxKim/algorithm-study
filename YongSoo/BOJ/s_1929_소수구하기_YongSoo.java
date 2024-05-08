@@ -8,6 +8,7 @@ import java.util.StringTokenizer;
  * 에라토스테네스의 체 알고리즘 사용
  */
 
+
 public class s_1929_소수구하기_YongSoo {
     static BufferedReader br;
     static StringTokenizer st;
