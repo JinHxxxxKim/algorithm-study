@@ -3,6 +3,11 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.*;
 
+/**
+ * 이 파일은, s_1854_k번째최단경로찾기_YongSoo 문제를 기반으로 하여
+ * 최대한 형식을 비슷하게 맞춰 놓은 다익스트라 알고리즘 구현 파일입니다
+ * (1854번 문제가 잘 이해되지 않을 때, 차이점을 비교하는 용도로 사용. 이외에는 무시해도 무방)
+ */
 public class SimpleDijkstra {
 
     static BufferedReader br;
