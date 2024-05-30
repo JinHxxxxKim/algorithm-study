@@ -1,3 +1,5 @@
+package ETC;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -13,7 +15,7 @@ import java.util.StringTokenizer;
  *     기절한 산타는 다음 턴까지 기절해 있어야 하는데 boolean으로는 이를 구현하기 어려워 int를 사용
  */
 
-public class Main {
+public class s_루돌프의반란_조용수 {
 
     static BufferedReader br;
     static StringTokenizer st;
