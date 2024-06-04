@@ -50,9 +50,9 @@ $ git push origin [UserName: 사용자 branch]
 
 ## ✅ 소스코드 파일 이름 규칙
 
-- s문제번호\_사용자명.java
+- s\_문제번호\_문제이름\_영문사용자명.java
 
-- 예시: 백준 1043번 거짓말 &rarr; `s1043_거짓말.java`
+- 예시: 백준 1043번 거짓말 &rarr; `s_1043_거짓말_userName.java`
 
 <br />
 <br />
@@ -82,11 +82,7 @@ $ git commit -m "[BOJ] 거짓말 / UserName / 200ms"
 
 ## ✅ PR 규칙
 
-- PR 제목: commit 규칙과 동일
-
-  - [문제 출처(플랫폼)] 문제이름 / 사용자 명 / 실행시간
-
-- `[BOJ] 거짓말 / UserName / 200ms`
+- [PULL_REQUEST_TEMPLATE](https://github.com/JinHxxxxKim/algorithm-study/blob/main/.github/PULL_REQUEST_TEMPLATE.md) 참고
 
 <br />
 <br />
