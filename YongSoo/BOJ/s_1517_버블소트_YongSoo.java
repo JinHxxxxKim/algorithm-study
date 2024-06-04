@@ -85,8 +85,6 @@ public class s_1517_버블소트_YongSoo {
         while (idx < fenwickTree.length) {
             fenwickTree[idx]++;
             idx += ((idx) & (-idx));
-
-            if (++cnt == 20) break;
         }
     }
 
