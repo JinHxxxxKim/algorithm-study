@@ -1,57 +1,31 @@
 import java.util.*;
+
 /**
- * 1. 제약조건 및 함수호출 확인
- *	1-1. trade() 호출 <= 1000
- *	1-2. move()	호출 <= 500
- *	1-3. 선수들의 수 <= 39990
- *	1-4. 리그의 개수 <= 10
- *
+ * 1. 제약 사항 및 함수호출 횟수
+ * 	1-1. move()<=500
+ * 	1-2. trade()<=1000 : 중간 선수를 찾는 것을 빠르게 수행
  */
 
 /**
- * 1. 리그별로 선수들을 어떤 자료구조로 저장해야 하는가?
- * 	1-1. 배열 => 접근은 빠르지만 선수이동 후 매번 정렬해야함
- * 	1-2. 자동 정렬이 되는 자료구조는 뭐가 있을까?
- * 		1-2-1. 우선순위 큐 => 중간값을 처리할 수 없음
- * 		1-2-2. 트리셋 => 처음, 끝의 검색이 자유로움. 중간은 iterator로 접근가능
- *  1-3. 각 리그마다 트리셋으로 생성
- *
- * 2. 각 리그에서 모두 한꺼번에 선수들을 제거한 다음, 한꺼번에 넣기
- * 	2-1. 0번째 리그의 좋은 선수와, 마지막 리그의 나쁜 선수는 이동 없음
- *
+ * 1. 이동이 발생하는 모든 선수들을 다 빼놓고 맞는 자리 찾아넣기
+ * 2. 이진탐색
  */
 
 /**
- * move()
+ * 1. 설계를 제대로 하고 들어가자.
  *
- * 1. 0번째 리그의 좋은 선수와 마지막 리그의 나쁜 선수를 빼서 따로 저장
- * 2. 1번째 리그(now)의 좋은 선수와 0번째 리그(prev)의 나쁜 선수 교환
- * 3. 반복
- * 4. 0번째 리그의 좋은 선수와 마지막 리그의 나쁜 선수를 추가
+ *
  *
  */
-
-/**
- * trade()
- *
- * 1. 0번째 리그의 좋은 선수와 마지막 리그의 중간 선수를 빼서 따로 저장
- * 2. 1번째 리그(now)의 좋은 선수와 0번째 리그(prev)의 중간 선수 교환
- * 3. 반복
- * 4. 0번째 리그의 좋은 선수와 마지막 리그의 중간 선수를 추가
- *
- */
-
-
 
 class UserSolution {
 	public class Player implements Comparable<Player>{
-		int id;
-		int ability;
+		int id, ability;
 		public Player(int id, int ability){
 			this.id=id;
 			this.ability=ability;
 		}
-
+		@Override
 		public int compareTo(Player o){
 			if(this.ability==o.ability){
 				return this.id-o.id;
@@ -59,55 +33,96 @@ class UserSolution {
 			return o.ability-this.ability;
 		}
 	}
-	int N;
-	int L;
-	int[] ability;
-	int playerPerLeague;
-	TreeSet<Player>[] leagues;
+
+	public int N, L;
+	public int playerPerLeague;
+	public int[] ability;
+	public ArrayList<Player>[] leagues;
+
+	//이진탐색
+	int binarySearch(ArrayList<Player> league, Player one){
+		int leftIdx=0;
+		int rightIdx=league.size()-1;
+
+		while(leftIdx<=rightIdx){
+			int midIdx=(leftIdx+rightIdx)/2;
+			Player midPlayer = league.get(midIdx);
+			int temp = midPlayer.compareTo(one);
+			if(temp<0){
+				leftIdx=midIdx+1;
+			}
+			else {
+				rightIdx=midIdx-1;
+
+			}
+		}
+		return leftIdx;
+	}
 
 
 	void init(int N, int L, int mAbility[]) {
 		this.N=N;
 		this.L=L;
-		this.ability=mAbility;
-		playerPerLeague = N/L;
-		leagues = new TreeSet[L];
-		for(int idx=0; idx<L; idx++) {
-			leagues[idx] = new TreeSet<>();
+		ability=mAbility;
+		playerPerLeague=N/L;
+		leagues = new ArrayList[L];
+		for(int idx=0; idx<L; idx++){
+			leagues[idx] = new ArrayList<>();
 		}
 		for(int idx=0; idx<N; idx++){
-			int leagueNum = idx/playerPerLeague;
-			leagues[leagueNum].add(new Player(idx, ability[idx]));
+			int lNum = idx/playerPerLeague;
+			leagues[lNum].add(new Player(idx, ability[idx]));
 		}
+		//정렬
+		for(int idx=0; idx<L; idx++){
+			Collections.sort(leagues[idx]);
+		}
+		// System.out.println("초기상태");
+		// for(int idx=0; idx<L; idx++){
+		// 	for(int p=0; p<leagues[idx].size(); p++){
+		// 		System.out.print(leagues[idx].get(p).id+" ");
+		// 	}
+		// 	System.out.println();
+		// }
 	}
 
 	int move() {
 		int ans=0;
-		//각 리그에서 좋은 선수와 나쁜 선수들 따로 저장해둘 리스트
-		Player[] tempGoodPlayer = new Player[L];
-		Player[] tempBadPlayer = new Player[L];
+		//각 리그의 뛰어난 선수와 부족한 선수를 따로 저장 후 삭제
+		Player[] topPlayer = new Player[L];
+		Player[] bottomPlayer = new Player[L];
 
-		//각 리그에서 좋은 선수와 나쁜 선수들 빼기
-		for(int now=0; now<L; now++){
-			tempGoodPlayer[now] = leagues[now].first();
-			tempBadPlayer[now] = leagues[now].last();
-
-			leagues[now].remove(tempGoodPlayer[now]);
-			leagues[now].remove(tempBadPlayer[now]);
+		for(int idx=0; idx<L; idx++){
+			topPlayer[idx] = leagues[idx].get(0);
+			bottomPlayer[idx] = leagues[idx].get(playerPerLeague-1);
+			leagues[idx].remove(0);
+			leagues[idx].remove(leagues[idx].size()-1);
 		}
-
-		//이동한 결과를 각 리그에 넣기
+		// System.out.println("move() 수행 전 삭제");
+		// for(int idx=0; idx<L; idx++){
+		// 	for(int p=0; p<leagues[idx].size(); p++){
+		// 		System.out.print(leagues[idx].get(p).id+" ");
+		// 	}
+		// 	System.out.println();
+		// }
+		//이동하는 선수들을 이진탐색으로 넣을 위치를 찾은 후, 정렬되도록 넣기
 		for(int now=1; now<L; now++){
 			int prev=now-1;
-			leagues[now].add(tempBadPlayer[prev]);
-			leagues[prev].add(tempGoodPlayer[now]);
-
-			ans+=tempBadPlayer[prev].id+tempGoodPlayer[now].id;
+			leagues[prev].add(binarySearch(leagues[prev], topPlayer[now]), topPlayer[now]);
+			leagues[now].add(binarySearch(leagues[now], bottomPlayer[prev]), bottomPlayer[prev]);
+			ans+=topPlayer[now].id+bottomPlayer[prev].id;
 		}
 
-		//0번째 리그의 좋은 선수와 마지막 리그의 나쁜 선수 넣기
-		leagues[0].add(tempGoodPlayer[0]);
-		leagues[L-1].add(tempBadPlayer[L-1]);
+		//0번째 리그의 뛰어난 선수와 마지막 리그의 부족한 선수를 추가
+		leagues[0].add(binarySearch(leagues[0], topPlayer[0]), topPlayer[0]);
+		leagues[L-1].add(binarySearch(leagues[L-1], bottomPlayer[L-1]), bottomPlayer[L-1]);
+		// System.out.println("move() 수행 후");
+		// for(int idx=0; idx<L; idx++){
+		// 	for(int p=0; p<leagues[idx].size(); p++){
+		// 		System.out.print(leagues[idx].get(p).id+" ");
+		// 	}
+		// 	System.out.println();
+		// }
 
 		return ans;
 	}
@@ -115,36 +130,45 @@ class UserSolution {
 	int trade() {
 		int ans=0;
 		int midIndex=playerPerLeague/2;
-		//각 리그에서 좋은 선수와 중간 선수들 따로 저장해둘 리스트
-		Player[] tempGoodPlayer = new Player[L];
-		Player[] tempMidPlayer = new Player[L];
+		//각 리그의 뛰어난 선수와 부족한 선수를 따로 저장 후 삭제
+		Player[] topPlayer = new Player[L];
+		Player[] midPlayer = new Player[L];
 
-		//각 리그에서 좋은 선수와 중간 선수들 빼기
-		for(int now=0; now<L; now++){
-			tempGoodPlayer[now] = leagues[now].first();
+		for(int idx=0; idx<L; idx++){
+			topPlayer[idx] = leagues[idx].get(0);
+			midPlayer[idx] = leagues[idx].get(leagues[idx].size()/2);
 
-			Iterator<Player> iterator = leagues[now].iterator();
-			for(int idx=0; idx<midIndex; idx++){
-				iterator.next();
-			}
-			tempMidPlayer[now] = iterator.next();
-
-			leagues[now].remove(tempGoodPlayer[now]);
-			leagues[now].remove(tempMidPlayer[now]);
+			leagues[idx].remove(leagues[idx].size()/2);
+			leagues[idx].remove(0);
 		}
 
-		//이동한 결과를 각 리그에 넣기
+		// System.out.println("trade() 수행 전 삭제");
+		// for(int idx=0; idx<L; idx++){
+		// 	for(int p=0; p<leagues[idx].size(); p++){
+		// 		System.out.print(leagues[idx].get(p).id+" ");
+		// 	}
+		// 	System.out.println();
+		// }
+
+		//이동하는 선수들을 이진탐색으로 넣을 위치를 찾은 후, 정렬되도록 넣기
 		for(int now=1; now<L; now++){
 			int prev=now-1;
-			leagues[now].add(tempMidPlayer[prev]);
-			leagues[prev].add(tempGoodPlayer[now]);
-
-			ans+=tempMidPlayer[prev].id+tempGoodPlayer[now].id;
+			leagues[prev].add(binarySearch(leagues[prev], topPlayer[now]), topPlayer[now]);
+			leagues[now].add(binarySearch(leagues[now], midPlayer[prev]), midPlayer[prev]);
+			ans+=topPlayer[now].id+midPlayer[prev].id;
 		}
 
-		//0번째 리그의 좋은 선수와 마지막 리그의 중간 선수 넣기
-		leagues[0].add(tempGoodPlayer[0]);
-		leagues[L-1].add(tempMidPlayer[L-1]);
+		//0번째 리그의 뛰어난 선수와 마지막 리그의 중간 선수를 추가
+		leagues[0].add(binarySearch(leagues[0], topPlayer[0]), topPlayer[0]);
+		leagues[L-1].add(binarySearch(leagues[L-1], midPlayer[L-1]), midPlayer[L-1]);
+
+		// System.out.println("trade() 수행 후");
+		// for(int idx=0; idx<L; idx++){
+		// 	for(int p=0; p<leagues[idx].size(); p++){
+		// 		System.out.print(leagues[idx].get(p).id+" ");
+		// 	}
+		// 	System.out.println();
+		// }
 
 		return ans;
 	}
